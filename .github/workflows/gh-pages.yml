@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Dump GitHub context
         env:
-          GITHUB_BRANCH: ${{ env.GITHUB_REF_NAME }}
+          GITHUB_BRANCH: ${{ github.ref }}
         run: echo "$GITHUB_BRANCH"
   deploy:
     runs-on: ubuntu-22.04
