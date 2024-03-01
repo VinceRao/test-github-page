@@ -1,10 +1,14 @@
 name: GitHub Pages
 
 on:
+  pull_request:
   push:
     branches:
       - main
       - develop
+
+env:
+  PUBLISH_DIR: ${{ github.event_name != 'pull_request' && github.ref_name || format('PRs/{0}', github.event.number) }}
 
 jobs:
   echo:
@@ -20,16 +24,22 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: write
+      pull-requests: write
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v3
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        # If you're changing the branch from main,
-        # also change the `main` in `refs/heads/main`
-        # below accordingly.
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           destination_dir: ./${{ github.ref_name }}
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            The storybook URL of ${{ github.sha }}: http://123/${{ env.PUBLISH_DIR }}/index.html
+          comment_tag: sl-ui-storybook-url
+          mode: recreate
