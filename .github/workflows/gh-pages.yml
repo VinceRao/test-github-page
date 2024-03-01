@@ -42,3 +42,4 @@ jobs:
           message: |
             The storybook URL of ${{ github.sha }}: http://123/${{ env.PUBLISH_DIR }}/index.html
           comment_tag: sl-ui-storybook-url
+          mode: recreate
