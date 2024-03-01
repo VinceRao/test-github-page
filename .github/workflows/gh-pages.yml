@@ -43,4 +43,4 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            The storybook URL is: http://123/$PUBLISH_DIR/index.html
+            The storybook URL is: http://123/${{ env.PUBLISH_DIR }}/index.html
